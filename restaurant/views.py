@@ -4,13 +4,14 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from restaurant.mixins import VersionedAPIView
 from restaurant.models import Restaurant, Menu
 from restaurant.permissions import IsAdminOrIfAuthenticatedReadOnly
 from restaurant.serializers import RestaurantSerializer, RestaurantListSerializer, MenuSerializer, \
     MenuVoteCountSerializer
 
 
-class RestaurantViewSet(ModelViewSet):
+class RestaurantViewSet(VersionedAPIView, ModelViewSet):
     queryset = Restaurant.objects.all()
     permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
 
@@ -20,7 +21,7 @@ class RestaurantViewSet(ModelViewSet):
         return RestaurantSerializer
 
 
-class MenuViewSet(ModelViewSet):
+class MenuViewSet(VersionedAPIView, ModelViewSet):
     permission_classes = [IsAdminOrIfAuthenticatedReadOnly]
     serializer_class = MenuSerializer
 
@@ -28,7 +29,7 @@ class MenuViewSet(ModelViewSet):
         today = datetime.date.today()
         return Menu.objects.filter(date=today).select_related("restaurant")
 
-class MenuVoteCountListView(generics.ListAPIView):
+class MenuVoteCountListView(VersionedAPIView, generics.ListAPIView):
     """View to list all menus with their upvote counts."""
     serializer_class = MenuVoteCountSerializer
     permission_classes = [IsAuthenticated]

@@ -2,16 +2,17 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from restaurant.mixins import VersionedAPIView
 from user.models import Employee, Vote
 from user.serializers import UserSerializer, EmployeeSerializer, VoteSerializer
 
 
-class CreateUserView(generics.CreateAPIView):
+class CreateUserView(VersionedAPIView, generics.CreateAPIView):
     """View to create a new user."""
     serializer_class = UserSerializer
 
 
-class ManageUserView(generics.RetrieveUpdateAPIView):
+class ManageUserView(VersionedAPIView, generics.RetrieveUpdateAPIView):
     """View to manage authenticated user."""
     serializer_class = UserSerializer
     authentication_classes = (JWTAuthentication,)
@@ -21,12 +22,12 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-class CreateEmployeeView(generics.CreateAPIView):
+class CreateEmployeeView(VersionedAPIView, generics.CreateAPIView):
     """View to create a new Employee."""
     serializer_class = EmployeeSerializer
 
 
-class EmployeeListView(generics.ListAPIView):
+class EmployeeListView(VersionedAPIView, generics.ListAPIView):
     """View to list all Employees. Accessible only by admin."""
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.select_related("user")
@@ -34,7 +35,7 @@ class EmployeeListView(generics.ListAPIView):
     permission_classes = (IsAdminUser,)
 
 
-class EmployeeDetailView(generics.RetrieveUpdateAPIView):
+class EmployeeDetailView(VersionedAPIView, generics.RetrieveUpdateAPIView):
     """View to manage an authenticated employee's profile."""
     serializer_class = EmployeeSerializer
     authentication_classes = (JWTAuthentication,)
@@ -45,14 +46,14 @@ class EmployeeDetailView(generics.RetrieveUpdateAPIView):
         return self.request.user.employee
 
 
-class CreateVoteView(generics.CreateAPIView):
+class CreateVoteView(VersionedAPIView, generics.CreateAPIView):
     """View to create a new Vote."""
     serializer_class = VoteSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
 
-class VoteListView(generics.ListAPIView):
+class VoteListView(VersionedAPIView, generics.ListAPIView):
     """View to list all Votes."""
     serializer_class = VoteSerializer
     queryset = Vote.objects.select_related("employee", "menu")
