@@ -1,0 +1,57 @@
+[
+  {
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+      "password": "password123",
+      "last_login": "2025-02-13T17:00:00Z",
+      "is_superuser": false,
+      "first_name": "John",
+      "last_name": "Doe",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-02-13T17:00:00Z",
+      "email": "johndoe@example.com",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "user.employee",
+    "pk": 1,
+    "fields": {
+      "name": "John Doe",
+      "position": "Chef",
+      "date_of_birth": "1990-05-12",
+      "user": 1
+    }
+  },
+  {
+    "model": "restaurant.restaurant",
+    "pk": 1,
+    "fields": {
+      "name": "The Great Restaurant",
+      "address": "123 Delicious Street",
+      "cuisine_type": "italian"
+    }
+  },
+  {
+    "model": "restaurant.menu",
+    "pk": 1,
+    "fields": {
+      "date": "2025-02-14",
+      "dishes": "Spaghetti Bolognese, Margherita Pizza, Caesar Salad",
+      "restaurant": 1
+    }
+  },
+  {
+    "model": "user.vote",
+    "pk": 1,
+    "fields": {
+      "vote_value": true,
+      "date": "2025-02-14",
+      "employee": 1,
+      "menu": 1
+    }
+  }
+]
